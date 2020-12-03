@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<!-- begin header -->
+	<div id = "header" th:fragment="headerFragment">
+	header.html<br/>
+		상단메뉴 <br/> 
+		<a th:href = "@{/memberInsert}">01회원가입</a>
+		<a th:if="${session.SID != null}" th:href = "@{/memberList}">02회원전체검색</a>
+		<a th:if="${session.SID ==2}" href = "#">03상품등록</a>
+		<a href = "/goodsList">04상품전체검색</a>
+		<a th:href = "@{/sellerList}">05판매자별상품현황</a>
+		<a th:href = "@{/login}">06로그인</a>
+		<a th:href = "@{/logout}">07로그아웃</a>
+	</div>
+	<!-- end header -->
+</html>

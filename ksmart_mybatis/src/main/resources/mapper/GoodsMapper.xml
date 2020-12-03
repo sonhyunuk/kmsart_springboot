@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ksmart37.ksmart_mybatis.mapper.GoodsMapper">
+<resultMap type="Goods" id="goodsMapMapper"> <!-- type 속성은 dto클래스명 id는  crud 태그를 만들때 resultMap속성에 넣을 값  -->
+  		<result column="g_code" property="goodsCode"/> <!--column 속성은 데이터베이스의 컬럼명 property 속성은 dto맴버변수명  -->
+  		<result column="g_name" property="goodsName"/>
+  		<result column="g_price" property="goodsPrice"/>
+  		<result column="g_seller_id" property="goodsSellerId"/>
+  		<result column="g_reg_date" property="goodsRegDate"/>
+  		<association property="member" javaType="Member">
+  			<id column="m_id" property="memberId"/>
+  			<result column="m_pw" property="memberPw"/>
+  			<result column="m_name" property="memberName"/>
+  			<result column="m_level" property="memberLevel"/>
+  			<result column="m_email" property="memberEmail"/>
+  			<result column="m_addr" property="memberAddr"/>
+  			<result column="m_reg_date" property="memberRegDate"/>
+  		</association>
+  	</resultMap>
+
+  	
+<select id="getGoodsList" resultMap="goodsMapMapper">
+	SELECT
+		g.g_code,
+		g.g_name,
+		g.g_price,
+		g.g_seller_id,
+		m.m_name
+	FROM
+		tb_member as m
+		INNER JOIN
+		tb_goods AS g
+		ON
+		m.m_id = g.g_seller_id;  	
+  	
+</select>
+  	
+<select id="getGoodsByCode" parameterType="String" resultMap="goodsMapMapper">
+	SELECT
+		g_code,
+		g_name,
+		g_price,
+		g_seller_id
+	FROM 
+		tb_goods 
+	WHERE 
+		g_code = #{goodsCode};
+</select>
+<update id="ModifyGoods" parameterType="Goods" >
+	UPDATE
+		tb_goods
+	<trim prefix="SET" suffixOverrides=",">
+		<if test="goodsName neq null and goodsName neq ''.toString()">
+			g_name = #{goodsName},
+		</if>
+		<if test="goodsName neq null and goodsName neq ''.toString()">
+			g_price = #{goodsPrice},
+		</if>
+	</trim>
+	WHERE
+		g_code=#{goodsCode};
+</update>
+
+<delete id="removeGoods" parameterType="String">
+	DELETE
+	FROM
+		tb_goods
+	WHERE
+		g_code = #{goodsCode};
+</delete>
+
+
+
+</mapper>
